@@ -31,9 +31,9 @@ def parse_qa_tile(data, x, y, zoom, **kwargs):
 def _make_importer_parser(parser_class, **kwargs):
     gi = GraphImporter()
     parser = parser_class(
-        coords_callback=gi.add_coords,
-        nodes_callback=gi.add_nodes,
-        ways_callback=gi.add_ways, 
+        coords_callback=gi.coords_callback,
+        nodes_callback=gi.nodes_callback,
+        ways_callback=gi.ways_callback, 
         **kwargs
     )
 

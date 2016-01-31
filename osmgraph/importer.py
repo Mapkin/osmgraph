@@ -9,18 +9,18 @@ class GraphImporter(object):
         self.nodes = {}  # node_id -> tags dict
         self.ways = {}  # way_id -> (tags dict, node_id sequence list)
 
-    def add_coords(self, data):
+    def coords_callback(self, data):
         """ Callback for nodes that have no tags """
         for node_id, lon, lat in data:
             self.coords[node_id] = (lon, lat)
 
-    def add_nodes(self, data):
+    def nodes_callback(self, data):
         """ Callback for nodes with tags """
         for node_id, tags, coords in data:
             # Discard the coords because they go into add_coords
             self.nodes[node_id] = tags
 
-    def add_ways(self, data):
+    def ways_callback(self, data):
         """ Callback for all ways """
         for way_id, tags, nodes in data:
             # Imposm passes all ways through regardless of whether the tags

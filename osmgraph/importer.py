@@ -42,9 +42,9 @@ class GraphImporter(object):
             oneway = tags.get('oneway') == 'yes'
 
             for n0, n1 in pairwise(nodes):
-                g.add_edge(n0, n1, **tags)
+                g.add_edge(n0, n1, attr_dict=tags)
                 if not oneway:
-                    g.add_edge(n1, n0, **tags)
+                    g.add_edge(n1, n0, attr_dict=tags)
 
                 g.node[n0].update(self._node_properties(n0))
             g.node[n1].update(self._node_properties(n1))

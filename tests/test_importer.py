@@ -55,3 +55,26 @@ def test_importer():
     ]
     assert sorted(g.nodes(data=True)) == expected_nodes
     assert sorted(g.edges(data=True)) == expected_edges
+
+
+def test_u_v_edges():
+    gi = GraphImporter()
+
+    coords = [
+        (0, 1.0, 2.0),
+        (1, 3.0, 4.0),
+    ]
+    gi.coords_callback(coords)
+
+    ways = [
+        (1, {'u': 'value1', 'v': 'value2'}, [0, 1]),
+    ]
+    gi.ways_callback(ways)
+
+    g = gi.get_graph()
+
+    expected_edges = [
+        (0, 1, {'u': 'value1', 'v': 'value2'}),
+        (1, 0, {'u': 'value1', 'v': 'value2'})
+    ]
+    assert sorted(g.edges(data=True)) == expected_edges

@@ -4,6 +4,15 @@ from .importer import GraphImporter
 
 
 def parse_file(filename, **kwargs):
+    """
+    Return an OSM networkx graph from the input OSM file
+
+    Only works with OSM xml, xml.bz2 and pbf files. This function cannot take
+    OSM QA tile files. Use parse_qa_tile() for QA tiles.
+
+    >>> graph = parse_file(filename)
+
+    """
     importer, parser = _make_importer_parser(OSMParser, **kwargs)
     parser.parse(filename)
 
@@ -11,6 +20,17 @@ def parse_file(filename, **kwargs):
 
 
 def parse_data(data, type, **kwargs):
+    """
+    Return an OSM networkx graph from the input OSM data
+
+    Parameters
+    ----------
+    data : string
+    type : string ('xml', 'pbf', or 'qatile')
+
+    >>> graph = parse_data(data, 'xml')
+
+    """
     if type in {'xml', 'pbf'}:
         # If XML or PBF, write to file then call parse
         arg = filename
@@ -25,6 +45,22 @@ def parse_data(data, type, **kwargs):
 
 
 def parse_qa_tile(data, x, y, zoom, **kwargs):
+    """
+    Return an OSM networkx graph from the input OSM QA tile data
+
+    Parameters
+    ----------
+    data : string
+    x : int
+        tile's x coordinate
+    y : int
+        tile's y coordinate
+    zoom : int
+        tile's zoom level
+
+    >>> graph = parse_qa_tile(data, 1239, 1514, 12)
+
+    """
     return parse_data(data, 'qatile', x=x, y=y, zoom=zoom, **kwargs)
 
 

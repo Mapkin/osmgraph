@@ -35,16 +35,15 @@ class GraphImporter(object):
         g = nx.DiGraph()
 
         for way_id, (tags, nodes) in self.ways.items():
-            oneway = tags.get('oneway')
             # If oneway is '-1', reverse the way and treat as a normal oneway
-            if oneway == '-1':
+            if tags.get('oneway') == '-1':
                 nodes = reversed(nodes)
-                oneway = 'yes'
-            backward = oneway != 'yes'
+                tags['oneway'] = 'yes'
+            oneway = tags.get('oneway') == 'yes'
 
             for n0, n1 in pairwise(nodes):
                 g.add_edge(n0, n1, **tags)
-                if backward:
+                if not oneway:
                     g.add_edge(n1, n0, **tags)
 
                 g.node[n0].update(self._node_properties(n0))

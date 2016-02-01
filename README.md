@@ -21,10 +21,10 @@ Usage
 
 Graph Structure
 --------------
-
+TODO
 
 See Also
 --------
-[networkx](https://networkx.github.io)
-[OSM QA Tiles](https://osmlab.github.io/osm-qa-tiles/)
-[imposm.parser](https://github.com/omniscale/imposm-paser)
+* [networkx](https://networkx.github.io)
+* [OSM QA Tiles](https://osmlab.github.io/osm-qa-tiles/)
+* [imposm.parser](https://github.com/omniscale/imposm-paser)

@@ -61,7 +61,10 @@ def parse_qa_tile(data, x, y, zoom, **kwargs):
     >>> graph = parse_qa_tile(data, 1239, 1514, 12)
 
     """
-    return parse_data(data, 'qatile', x=x, y=y, zoom=zoom, **kwargs)
+    import osmqa
+    importer, parser = _make_importer_parser(osmqa.QATileParser, **kwargs)
+    parser.parse_data(data, x, y, zoom)
+    return importer.get_graph()
 
 
 def _make_importer_parser(parser_class, **kwargs):

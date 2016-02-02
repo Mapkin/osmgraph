@@ -3,9 +3,9 @@ osmgraph
 
 Create [networkx](https://networkx.github.io/) graphs from OpenStreetMap (OSM)
 data.  `osmgraph` uses
-[imposm-parser](https://github.com/omniscale/imposm-parser) for parsing raw
-OpenStreetMap data. `imposm.parser` provides native readers for XML and PBF
-files. You can also use `osmqa-parser` to create graphs from
+[imposm-parser](https://github.com/omniscale/imposm-parser) for parsing
+OpenStreetMap XML and PBF
+files and [osmqa-parser](https://github.com/mapkin/osmqa-parser) for parsing
 [OSM QA tiles](http://osmlab.github.io/osm-qa-tiles/).
 
 

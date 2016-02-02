@@ -26,22 +26,15 @@ def parse_data(data, type, **kwargs):
     Parameters
     ----------
     data : string
-    type : string ('xml', 'pbf', or 'qatile')
+    type : string ('xml' or 'pbf')
 
     >>> graph = parse_data(data, 'xml')
 
     """
-    if type in {'xml', 'pbf'}:
-        # If XML or PBF, write to file then call parse
-        arg = filename
-        return parse_file(filename, **kwargs)
-    elif type == 'qatile':
-        import osmqa
-        importer, parser = _make_importer_parser(osmqa.QATileParser, **kwargs)
-        parser.parse_data(data)
-        return importer.get_graph()
-    else:
+    if type not in {'xml', 'pbf'}:
         raise ValueError('Unknown data type "%s"' % type)
+    # TODO: Write out a temporary file and call parse_file
+    raise NotImplementedError()
 
 
 def parse_qa_tile(data, x, y, zoom, **kwargs):

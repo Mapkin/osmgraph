@@ -25,11 +25,21 @@ Graph Structure
 For example:
 ```
 >>> g = osmgraph.parse_file('boston_massachusetts.osm.bz2')
+```
+
+Given the following XML node:
+```
+  <node id="665539692" lat="42.3971185" lon="-71.0207486" version="2" timestamp="2014-06-25T04:45:25Z" changeset="23135192" uid="422979" user="Parcanman">
+    <tag k="railway" v="level_crossing"/>
+  </node>
+```
+
+```
 >>> g.node[665539692]
 {'coordinate': (-71.0207486, 42.3971185), 'railway': 'level_crossing'}
 ```
 
-Similarly, the nodes comprising an OSM way form the graph's edges. The way's attributes are duplicated across the edges. For example, given the following OSM way:
+Similarly, the nodes comprising an OSM way form the graph's edges. The way's attributes are duplicated across the edges. For example, given the following XML way:
 ```
   <way id="8636532" version="13" timestamp="2011-01-14T00:47:46Z" changeset="6963395" uid="381909" user="JessAk71">
     <nd ref="61448456"/>

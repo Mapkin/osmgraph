@@ -73,15 +73,6 @@ Similarly, the nodes comprising an OSM way form the graph's edges. The way's att
  'oneway': 'yes',
  'source': 'massgis_import_v0.1_20071008193615',
  'width': '30.2'}
->>> g[1102764005][1099120555]
-{'attribution': 'Office of Geographic and Environmental Information (MassGIS)',
- 'condition': 'fair',
- 'highway': 'primary',
- 'massgis:way_id': '134349',
- 'name': 'North Washington Street',
- 'oneway': 'yes',
- 'source': 'massgis_import_v0.1_20071008193615',
- 'width': '30.2'}
 ```
 
 Ways that are not oneway roads will have edges in both directions.

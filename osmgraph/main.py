@@ -13,7 +13,7 @@ def parse_file(filename, **kwargs):
     >>> graph = parse_file(filename)
 
     """
-    importer, parser = _make_importer_parser(OSMParser, **kwargs)
+    importer, parser = make_importer_parser(OSMParser, **kwargs)
     parser.parse(filename)
 
     return importer.get_graph()
@@ -55,18 +55,27 @@ def parse_qa_tile(data, x, y, zoom, **kwargs):
 
     """
     import osmqa
-    importer, parser = _make_importer_parser(osmqa.QATileParser, **kwargs)
+    importer, parser = make_importer_parser(osmqa.QATileParser, **kwargs)
     parser.parse_data(data, x, y, zoom)
     return importer.get_graph()
 
 
-def _make_importer_parser(parser_class, **kwargs):
+def make_importer_parser(parser_class, **kwargs):
     gi = GraphImporter()
+
+    if 'ways_tag_filter' not in kwargs:
+        kwargs['ways_tag_filter'] = default_ways_tag_filter
+
     parser = parser_class(
         coords_callback=gi.coords_callback,
         nodes_callback=gi.nodes_callback,
-        ways_callback=gi.ways_callback, 
+        ways_callback=gi.ways_callback,
         **kwargs
     )
 
     return gi, parser
+
+
+def default_ways_tag_filter(tags):
+    if 'highway' not in tags:
+        tags.clear()

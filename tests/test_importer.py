@@ -1,5 +1,6 @@
 from osmgraph.importer import GraphImporter
 
+
 def test_importer():
     gi = GraphImporter()
 

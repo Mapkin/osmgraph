@@ -2,6 +2,8 @@ import itertools
 
 import networkx as nx
 
+from . import tools
+
 
 class GraphImporter(object):
     def __init__(self):
@@ -41,7 +43,7 @@ class GraphImporter(object):
                 tags['oneway'] = 'yes'
             oneway = tags.get('oneway') == 'yes'
 
-            for n0, n1 in pairwise(nodes):
+            for n0, n1 in tools.pairwise(nodes):
                 g.add_edge(n0, n1, attr_dict=tags)
                 if not oneway:
                     g.add_edge(n1, n0, attr_dict=tags)
@@ -55,11 +57,3 @@ class GraphImporter(object):
         properties = self.nodes.get(node_id, {})
         properties['coordinate'] = self.coords[node_id]
         return properties
-
-
-def pairwise(iterable):
-    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
-    # From itertools docs: https://docs.python.org/2/library/itertools.html
-    a, b = itertools.tee(iterable)
-    next(b, None)
-    return itertools.izip(a, b)

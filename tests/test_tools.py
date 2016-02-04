@@ -6,29 +6,16 @@ import pytest
 from osmgraph import tools
 
 
-@pytest.fixture
-def tgraph():
-    #
-    #
-    #  1 -- 2 -- 3 -->-- 5 -->-- 7
-    #            |       |
-    #            ^       v
-    #            |       |
-    #            4       6
-    #
+def test_coordinates():
     g = nx.DiGraph()
-    g.add_edges_from([
-        (1, 2),
-        (2, 1),
-        (2, 3),
-        (3, 2),
-        (4, 3),
-        (3, 5),
-        (5, 6),
-        (5, 7),
-    ])
 
-    return g
+    c1, c2, c3 = [(1.0, 2.0), (3.0, 4.0), (5.0, 6.0)]
+    g.add_node(1, attr_dict={'coordinate': c1})
+    g.add_node(2, attr_dict={'coordinate': c2})
+    g.add_node(3, attr_dict={'coordinate': c3})
+    g.add_edges_from([(1, 2), (2, 3)])
+
+    assert tools.coordinates(g, (1, 2, 3)) == [c1, c2, c3]
 
 
 def test_nwise_3():
@@ -77,6 +64,31 @@ def test_pairwise():
         (8, 9),
     ]
     assert list(tools.pairwise(x)) == expected
+
+
+@pytest.fixture
+def tgraph():
+    #
+    #
+    #  1 -- 2 -- 3 -->-- 5 -->-- 7
+    #            |       |
+    #            ^       v
+    #            |       |
+    #            4       6
+    #
+    g = nx.DiGraph()
+    g.add_edges_from([
+        (1, 2),
+        (2, 1),
+        (2, 3),
+        (3, 2),
+        (4, 3),
+        (3, 5),
+        (5, 6),
+        (5, 7),
+    ])
+
+    return g
 
 
 def test_step_basic(tgraph):

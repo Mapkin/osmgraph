@@ -93,3 +93,11 @@ def test_step_inbound_true(tgraph):
 
 def test_step_stop(tgraph):
     assert tools.step(tgraph, 3, 5) is None
+
+
+def test_move(tgraph):
+    assert list(tools.move(tgraph, 1, 2)) == [1, 2, 3, 5]
+
+
+def test_move_inbound(tgraph):
+    assert list(tools.move(tgraph, 1, 2, inbound=True)) == [1, 2, 3]

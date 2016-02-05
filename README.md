@@ -17,6 +17,12 @@ Usage
 >>> g = osmgraph.parse_file(filename)
 ```
 
+Install [osmqa-parser](https://github.com/mapkin/osmqa-parser) to import a graph from a vector tile. Read the [documentation](https://github.com/mapkin/osmqa-parser#data-model-caveats) to understand the caveats associated with forming a network from OSM QA tiles.
+
+```
+>>> g = osmgraph.parse_qa_tile(data, x, y, zoom)
+```
+
 
 Graph Structure
 ---------------
@@ -150,4 +156,5 @@ See Also
 --------
 * [networkx](https://networkx.github.io)
 * [OSM QA Tiles](https://osmlab.github.io/osm-qa-tiles/)
+* [osmqa-parser](https://github.com/mapkin/osmqa-parser/)
 * [imposm.parser](https://github.com/omniscale/imposm-paser)

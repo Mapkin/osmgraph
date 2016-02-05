@@ -24,7 +24,7 @@ Graph Structure
 
 For example:
 ```
->>> g = osmgraph.parse_file('boston_massachusetts.osm.bz2')
+g = osmgraph.parse_file('boston_massachusetts.osm.bz2')
 ```
 
 Given the following XML node:
@@ -76,6 +76,75 @@ Similarly, the nodes comprising an OSM way form the graph's edges. The way's att
 ```
 
 Ways that are not oneway roads will have edges in both directions.
+
+
+Notes
+-----
+`osmgraph` loads the entire graph in memory. You should be careful how much
+data is being loaded. All parsing functions accept a `ways_tag_filter` and
+`nodes_tag_filter` arguments. These are functions that accept a dictionary
+of node or way tags. They should manipulate the dictionary in place to drop
+unused tags.
+
+For example, if we only care about nodes containing a traffic light.
+
+```
+def traffic_lights_filter(tags):
+    if tags.get('highway') != 'traffic_signals':
+        tags.clear()
+
+g = osmgraph.parse_file(filename, nodes_tag_filter=traffic_lights_filter)
+```
+
+Build a Cheapo Router
+-----------------------------------
+Parse some OSM data, add a `length` property to each edge using
+[geog](https://github.com/jwass/geog), use networkx's builtin shortest path
+algorithm to find the shortest path between two nodes.
+
+Use [geojsonio.py](https://github.com/jwass/geojsonio.py) to show the line on
+[geojson.io](https://geojson.io)
+
+```
+import geog
+import networkx as nx
+import osmgraph
+
+# By default any way with a highway tag will be loaded
+g = osmgraph.parse_file('boston_massachusetts.osm.bz2')  # or .osm or .pbf
+for n1, n2 in g.edges_iter():
+    c1, c2 = osmgraph.tools.coordinates(g, (n1, n2))   
+    g[n1][n2]['length'] = geog.distance(c1, c2)
+
+
+import random
+start = random.choice(g.nodes())
+end = random.choice(g.nodes())
+path = nx.shortest_path(g, start, end, 'length')
+coords = osmgraph.tools.coordinates(g, path)
+
+# Find the sequence of roads to get from start to end
+edge_names = [g[n1][n2].get('name') for n1, n2 in osmgraph.tools.pairwise(path)]
+import itertools
+names = [k for k, v in itertools.groupby(edge_names)]
+print(names)
+     ['North Harvard Street',
+      'Franklin Street',
+      'Lincoln Street',
+      None,
+      'Cambridge Street',
+      'Gordon Street',
+      'Warren Street',
+      'Commonwealth Avenue']
+
+# Visualize the path using geojsonio.py
+import geojsonio
+import json
+geojsonio.display(json.dumps({'type': 'LineString', 'coordinates': coords}))
+
+```
+
+[Route Line!](doc/images/router_line_example.jpg)
 
 See Also
 --------

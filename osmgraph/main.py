@@ -37,7 +37,7 @@ def parse_data(data, type, **kwargs):
     raise NotImplementedError()
 
 
-def parse_qa_tile(data, x, y, zoom, **kwargs):
+def parse_qa_tile(x, y, zoom, data, **kwargs):
     """
     Return an OSM networkx graph from the input OSM QA tile data
 
@@ -56,7 +56,7 @@ def parse_qa_tile(data, x, y, zoom, **kwargs):
     """
     import osmqa
     importer, parser = make_importer_parser(osmqa.QATileParser, **kwargs)
-    parser.parse_data(data, x, y, zoom)
+    parser.parse_data(x, y, zoom, data)
     return importer.get_graph()
 
 

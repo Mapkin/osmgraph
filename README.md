@@ -20,6 +20,7 @@ Usage
 Install [osmqa-parser](https://github.com/mapkin/osmqa-parser) to import a graph from a vector tile. Read the [documentation](https://github.com/mapkin/osmqa-parser#data-model-caveats) to understand the caveats associated with forming a network from OSM QA tiles.
 
 ```
+### Load data from mbtiles or other source
 >>> g = osmgraph.parse_qa_tile(data, x, y, zoom)
 ```
 

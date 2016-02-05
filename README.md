@@ -155,3 +155,5 @@ See Also
 * [OSM QA Tiles](https://osmlab.github.io/osm-qa-tiles/)
 * [osmqa-parser](https://github.com/mapkin/osmqa-parser/)
 * [imposm.parser](https://github.com/omniscale/imposm-paser)
+* [tile-reduce](https://github.com/mapbox/tile-reduce)
+* [tile-reduce-py](https://github.com/jwass/tile-reduce-py)

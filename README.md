@@ -102,7 +102,7 @@ def traffic_lights_filter(tags):
 g = osmgraph.parse_file(filename, nodes_tag_filter=traffic_lights_filter)
 ```
 
-Build a Cheapo Router
+Example: Build a Cheapo Router
 -----------------------------------
 Parse some OSM data, add a `length` property to each edge using
 [geog](https://github.com/jwass/geog), use networkx's builtin shortest path

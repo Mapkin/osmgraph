@@ -106,10 +106,7 @@ Build a Cheapo Router
 -----------------------------------
 Parse some OSM data, add a `length` property to each edge using
 [geog](https://github.com/jwass/geog), use networkx's builtin shortest path
-algorithm to find the shortest path between two nodes.
-
-Use [geojsonio.py](https://github.com/jwass/geojsonio.py) to show the line on
-[geojson.io](https://geojson.io)
+algorithm to find the shortest path between two nodes, use [geojsonio.py](https://github.com/jwass/geojsonio.py) to show the line on [geojson.io](https://geojson.io)
 
 ```
 import geog

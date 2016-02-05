@@ -144,7 +144,7 @@ geojsonio.display(json.dumps({'type': 'LineString', 'coordinates': coords}))
 
 ```
 
-[Route Line!](doc/images/router_line_example.jpg)
+![Route Line](doc/images/router_line_example.jpg)
 
 See Also
 --------

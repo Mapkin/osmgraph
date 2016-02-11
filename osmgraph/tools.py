@@ -99,6 +99,13 @@ def step(g, n1, n2, inbound=False, backward=False, continue_fn=None):
     >>> step(g, 7, 5, 3, backward=True)
     3
 
+    >>> def f(g, n1, n2, backward):
+            if n2 == 5:
+                return 7
+            return None
+    >>> step(g, 3, 5, continue_fn=f)
+    7
+
 
     Parameters
     ----------

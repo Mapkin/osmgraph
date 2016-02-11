@@ -72,7 +72,7 @@ def coordinates(g, nodes):
     return c
 
 
-def step(g, n1, n2, inbound=False):
+def step(g, n1, n2, inbound=False, backward=False):
     """
     Step along a path through a directed graph unless there is an intersection
 
@@ -96,6 +96,9 @@ def step(g, n1, n2, inbound=False):
     >>> step(g, 2, 3, inbound=True)
     None
 
+    >>> step(g, 7, 5, 3, backward=True)
+    3
+
 
     Parameters
     ----------
@@ -105,6 +108,8 @@ def step(g, n1, n2, inbound=False):
         (n1, n2) must be an edge in g
     inbound : bool (default False)
         whether incoming edges should be considered
+    backward : bool (default False)
+        whether edges are in reverse order (i.e., point from n2 to n1)
 
     Returns
     -------
@@ -112,9 +117,14 @@ def step(g, n1, n2, inbound=False):
     are no edges from n2 or multiple edges from n2
 
     """
-    nodes = g.successors(n2)
+    forw = g.successors
+    back = g.predecessors
+    if backward:
+        back, forw = forw, back
+
+    nodes = forw(n2)
     if inbound:
-        nodes = set(nodes + g.predecessors(n2))
+        nodes = set(nodes + back(n2))
     candidates = [n for n in nodes if n != n1]
 
     if len(candidates) == 1:
@@ -122,7 +132,7 @@ def step(g, n1, n2, inbound=False):
     return None
 
 
-def move(g, n1, n2, inbound=False):
+def move(g, n1, n2, **kwargs):
     """
     Step along a graph until it ends or reach an intersection
 
@@ -155,7 +165,7 @@ def move(g, n1, n2, inbound=False):
     """
     prev = n1
     curr = n2
-    _next = step(g, prev, curr, inbound=inbound)
+    _next = step(g, prev, curr, **kwargs)
 
     yield prev
     yield curr
@@ -163,11 +173,48 @@ def move(g, n1, n2, inbound=False):
         yield _next
         prev = curr
         curr = _next
-        _next = step(g, prev, curr, inbound=inbound)
+        _next = step(g, prev, curr, **kwargs)
+
+
+def is_intersection(g, n):
+    """
+    Determine if a node is an intersection
+
+    graph: 1 -->-- 2 -->-- 3
+
+    >>> is_intersection(g, 2)
+    False
+
+    graph:
+     1 -- 2 -- 3
+          |
+          4
+
+    >>> is_intersection(g, 2)
+    True
+
+    Parameters
+    ----------
+    g : networkx DiGraph
+    n : node id
+
+    Returns
+    -------
+    bool
+
+    """
+    return len(set(g.predecessors(n) + g.successors(n))) > 2
 
 
 def turn_angle(g, n1, n2, n3):
     coords = coordinates(g, [n1, n2, n3])
+    return turn_angle_coords(coords)
+
+
+def turn_angle_coords(coords):
+    if len(coords) != 3:
+        raise ValueError('coords must have length 3')
+
     angles = geog.course(coords[:-1], coords[1:])
 
     a = angles[1] - angles[0]

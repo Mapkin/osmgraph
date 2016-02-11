@@ -107,9 +107,74 @@ def test_step_stop(tgraph):
     assert tools.step(tgraph, 3, 5) is None
 
 
+def test_step_basic_backward(tgraph):
+    assert tools.step(tgraph, 3, 2, backward=True) == 1
+
+
+def test_step_inbound_false_backward(tgraph):
+    assert tools.step(tgraph, 7, 5, backward=True) == 3
+
+
+def test_step_inbound_true_backward(tgraph):
+    assert tools.step(tgraph, 7, 5, backward=True, inbound=True) is None
+
+
+def test_step_stop_backward(tgraph):
+    assert tools.step(tgraph, 5, 3, backward=True) is None
+
+
 def test_move(tgraph):
     assert list(tools.move(tgraph, 1, 2)) == [1, 2, 3, 5]
 
 
 def test_move_inbound(tgraph):
     assert list(tools.move(tgraph, 1, 2, inbound=True)) == [1, 2, 3]
+
+
+def test_move_backward(tgraph):
+    assert list(tools.move(tgraph, 7, 5, backward=True)) == [7, 5, 3]
+
+
+def test_move_backward_inbound(tgraph):
+    results = list(tools.move(tgraph, 7, 5, inbound=True, backward=True))
+    assert results == [7, 5]
+
+
+def test_is_intersection_easy():
+    #
+    #  1 -- 2 -- 3
+    #
+    g = nx.DiGraph()
+    g.add_edges_from([(1, 2), (2, 1), (2, 3), (3, 2)])
+    assert tools.is_intersection(g, 2) is False
+
+
+def test_is_intersection_oneways():
+    #
+    #  1 -->-- 2 -->-- 3
+    #
+    g = nx.DiGraph()
+    g.add_edges_from([(1, 2), (2, 3)])
+    assert tools.is_intersection(g, 2) is False
+
+
+def test_is_intersection_3_way():
+    #
+    #  1 -- 2 -- 3
+    #       |
+    #       4
+    g = nx.DiGraph()
+    g.add_edges_from([(1, 2), (2, 1), (2, 3), (3, 2), (2, 4), (4, 2)])
+    assert tools.is_intersection(g, 2)
+
+
+def test_is_intersection_3_way_in():
+    #
+    #  1 -- 2 -- 3
+    #       |
+    #       ^
+    #       |
+    #       4
+    g = nx.DiGraph()
+    g.add_edges_from([(1, 2), (2, 1), (2, 3), (3, 2), (4, 2)])
+    assert tools.is_intersection(g, 2)

@@ -72,7 +72,7 @@ def coordinates(g, nodes):
     return c
 
 
-def step(g, n1, n2, inbound=False, backward=False):
+def step(g, n1, n2, inbound=False, backward=False, continue_fn=None):
     """
     Step along a path through a directed graph unless there is an intersection
 
@@ -110,6 +110,14 @@ def step(g, n1, n2, inbound=False, backward=False):
         whether incoming edges should be considered
     backward : bool (default False)
         whether edges are in reverse order (i.e., point from n2 to n1)
+    continue_fn : callable (optional)
+        if at an intersection, continue_fn is called to indicate how to
+        proceed
+
+        continue_fn takes the form:
+        f(g, n1, n2, backward) where all arguments are as passed into step.
+        f should return a node id such that f(g, n1, n2, backward) is a
+        successors of n2. f should return None if no way forward.
 
     Returns
     -------
@@ -128,8 +136,12 @@ def step(g, n1, n2, inbound=False, backward=False):
     candidates = [n for n in nodes if n != n1]
 
     if len(candidates) == 1:
-        return candidates[0]
-    return None
+        result = candidates[0]
+    elif continue_fn:
+        result = continue_fn(g, n1, n2, backward)
+    else:
+        result = None
+    return result
 
 
 def move(g, n1, n2, **kwargs):

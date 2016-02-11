@@ -127,6 +127,32 @@ def test_move(tgraph):
     assert list(tools.move(tgraph, 1, 2)) == [1, 2, 3, 5]
 
 
+def test_move_continue_result(tgraph):
+    def c(g, n1, n2, backward):
+        if n1 == 3 and n2 == 5:
+            return 7
+        return None
+
+    assert list(tools.move(tgraph, 1, 2, continue_fn=c)) == [1, 2, 3, 5, 7]
+
+
+def test_move_continue(tgraph):
+    def c(g, n1, n2, backward):
+        return None
+
+    assert list(tools.move(tgraph, 1, 2, continue_fn=c)) == [1, 2, 3, 5]
+
+
+def test_move_continue_backward(tgraph):
+    def c(g, n1, n2, backward):
+        if backward and n1 == 5 and n2 == 3:
+            return 2
+        return None
+
+    result = list(tools.move(tgraph, 7, 5, backward=True, continue_fn=c))
+    assert result == [7, 5, 3, 2, 1]
+
+
 def test_move_inbound(tgraph):
     assert list(tools.move(tgraph, 1, 2, inbound=True)) == [1, 2, 3]
 

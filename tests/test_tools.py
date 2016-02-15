@@ -91,6 +91,23 @@ def tgraph():
     return g
 
 
+@pytest.fixture
+def loop_graph():
+    #
+    #  1 -- 2
+    #  |    |
+    #  4 -- 3
+    #
+    g = nx.DiGraph()
+    g.add_edges_from([
+        (1, 2),
+        (2, 3),
+        (3, 4),
+        (4, 1),
+    ])
+    return g
+
+
 def test_step_basic(tgraph):
     assert tools.step(tgraph, 1, 2) == 3
 
@@ -164,6 +181,11 @@ def test_move_backward(tgraph):
 def test_move_backward_inbound(tgraph):
     results = list(tools.move(tgraph, 7, 5, inbound=True, backward=True))
     assert results == [7, 5]
+
+
+def test_move_on_loop(loop_graph):
+    results = list(tools.move(loop_graph, 1, 2))
+    assert results == [1, 2, 3, 4, 1]
 
 
 def test_is_intersection_easy():

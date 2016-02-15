@@ -188,8 +188,13 @@ def move(g, n1, n2, **kwargs):
 
     yield prev
     yield curr
+
+    visited_nodes = set([prev, curr])
     while _next:
         yield _next
+        if _next in visited_nodes:
+            return
+        visited_nodes.add(_next)
         prev = curr
         curr = _next
         _next = step(g, prev, curr, **kwargs)

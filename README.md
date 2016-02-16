@@ -21,7 +21,7 @@ Install [osmqa-parser](https://github.com/mapkin/osmqa-parser) to import a graph
 
 ```
 ### Load data from mbtiles or other source
->>> g = osmgraph.parse_qa_tile(data, x, y, zoom)
+>>> g = osmgraph.parse_qa_tile(x, y, zoom, data)
 ```
 
 

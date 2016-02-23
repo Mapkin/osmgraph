@@ -1,3 +1,7 @@
+import os
+import tempfile
+import urllib
+
 from imposm.parser import OSMParser
 
 from .importer import GraphImporter
@@ -31,10 +35,22 @@ def parse_data(data, type, **kwargs):
     >>> graph = parse_data(data, 'xml')
 
     """
-    if type not in {'xml', 'pbf'}:
+    suffixes = {
+        'xml': '.osm',
+        'pbf': '.pbf',
+    }
+    try:
+        suffix = suffixes[type]
+    except KeyError:
         raise ValueError('Unknown data type "%s"' % type)
-    # TODO: Write out a temporary file and call parse_file
-    raise NotImplementedError()
+
+    fd, filename = tempfile.mkstemp(suffix=suffix)
+    try:
+        os.write(fd, data)
+        os.close(fd)
+        return parse_file(filename, **kwargs)
+    finally:
+        os.remove(filename)
 
 
 def parse_qa_tile(x, y, zoom, data, **kwargs):
@@ -60,6 +76,21 @@ def parse_qa_tile(x, y, zoom, data, **kwargs):
     return importer.get_graph()
 
 
+def parse_bbox(bbox, **kwargs):
+    """
+    Download OSM data from a bounding box and parse into a graph
+
+    Parameters
+    ----------
+    bbox : (west, south, east, north) tuple of 4 floats
+
+    >>> graph = parse_bbox([-71.06643, 42.36051, -71.06253, 42.36358])
+
+    """
+    data = _dowload_osm_bbox(bbox)
+    return parse_data(data, 'xml', **kwargs)
+
+
 def make_importer_parser(parser_class, **kwargs):
     gi = GraphImporter()
 
@@ -79,3 +110,15 @@ def make_importer_parser(parser_class, **kwargs):
 def default_ways_tag_filter(tags):
     if 'highway' not in tags:
         tags.clear()
+
+
+def _dowload_osm_bbox(bbox):
+    bbox_arg = urllib.urlencode({'bbox': ','.join(str(x) for x in bbox)})
+    url = 'http://openstreetmap.org/api/0.6/map?' + bbox_arg
+    response = urllib.urlopen(url)
+    if response.code != 200:
+        raise ValueError('Received %s from OSM' % response.code)
+    content = response.read()
+    response.close()
+
+    return content

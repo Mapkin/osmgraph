@@ -114,10 +114,11 @@ def default_ways_tag_filter(tags):
 
 def _dowload_osm_bbox(bbox):
     bbox_arg = urllib.urlencode({'bbox': ','.join(str(x) for x in bbox)})
-    url = 'http://openstreetmap.org/api/0.6/map?' + bbox_arg
+    url = 'http://www.openstreetmap.org/api/0.6/map?' + bbox_arg
     response = urllib.urlopen(url)
     if response.code != 200:
-        raise ValueError('Received %s from OSM' % response.code)
+        error = response.headers.getheader('Error')
+        raise ValueError('Received %s from OSM with error: %s' % (response.code, error))
     content = response.read()
     response.close()
 

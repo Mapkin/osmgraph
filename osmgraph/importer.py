@@ -32,7 +32,7 @@ class GraphImporter(object):
             if tags:
                 self.ways[way_id] = (tags, nodes)
 
-    def get_graph(self):
+    def get_graph(self, parse_direction=False):
         """ Return the networkx directed graph of received data """
         g = nx.DiGraph()
 
@@ -47,6 +47,9 @@ class GraphImporter(object):
                 g.add_edge(n0, n1, attr_dict=tags)
                 if not oneway:
                     g.add_edge(n1, n0, attr_dict=tags)
+                    if parse_direction:
+                        g[n0][n1]['_direction'] = 'forward'
+                        g[n1][n0]['_direction'] = 'backward'
 
                 g.node[n0].update(self._node_properties(n0))
             g.node[n1].update(self._node_properties(n1))

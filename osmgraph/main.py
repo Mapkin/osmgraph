@@ -20,7 +20,7 @@ def parse_file(filename, **kwargs):
     importer, parser = make_importer_parser(OSMParser, **kwargs)
     parser.parse(filename)
 
-    return importer.get_graph()
+    return importer.get_graph(parse_direction=bool(kwargs.get('parse_direction')))
 
 
 def parse_data(data, type, **kwargs):
@@ -73,7 +73,7 @@ def parse_qa_tile(x, y, zoom, data, **kwargs):
     import osmqa
     importer, parser = make_importer_parser(osmqa.QATileParser, **kwargs)
     parser.parse_data(x, y, zoom, data)
-    return importer.get_graph()
+    return importer.get_graph(parse_direction=bool(kwargs.get('parse_direction')))
 
 
 def parse_bbox(bbox, **kwargs):

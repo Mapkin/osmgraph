@@ -79,3 +79,23 @@ def test_u_v_edges():
         (1, 0, {'u': 'value1', 'v': 'value2'})
     ]
     assert sorted(g.edges(data=True)) == expected_edges
+
+
+def test_parse_direction():
+    gi = GraphImporter()
+
+    coords = [
+        (0, 1.0, 2.0),
+        (1, 3.0, 4.0),
+    ]
+    gi.coords_callback(coords)
+
+    ways = [
+        (1, {'u': 'value1', 'v': 'value2'}, [0, 1]),
+    ]
+    gi.ways_callback(ways)
+
+    g = gi.get_graph(parse_direction=True)
+
+    assert g[0][1]['_direction'] == 'forward'
+    assert g[1][0]['_direction'] == 'backward'

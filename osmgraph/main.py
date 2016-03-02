@@ -7,7 +7,7 @@ from imposm.parser import OSMParser
 from .importer import GraphImporter
 
 
-def parse_file(filename, **kwargs):
+def parse_file(filename, parse_direction=False, **kwargs):
     """
     Return an OSM networkx graph from the input OSM file
 
@@ -20,7 +20,7 @@ def parse_file(filename, **kwargs):
     importer, parser = make_importer_parser(OSMParser, **kwargs)
     parser.parse(filename)
 
-    return importer.get_graph(parse_direction=bool(kwargs.get('parse_direction')))
+    return importer.get_graph(parse_direction=parse_direction)
 
 
 def parse_data(data, type, **kwargs):
@@ -53,7 +53,7 @@ def parse_data(data, type, **kwargs):
         os.remove(filename)
 
 
-def parse_qa_tile(x, y, zoom, data, **kwargs):
+def parse_qa_tile(x, y, zoom, data, parse_direction=False, **kwargs):
     """
     Return an OSM networkx graph from the input OSM QA tile data
 
@@ -73,7 +73,7 @@ def parse_qa_tile(x, y, zoom, data, **kwargs):
     import osmqa
     importer, parser = make_importer_parser(osmqa.QATileParser, **kwargs)
     parser.parse_data(x, y, zoom, data)
-    return importer.get_graph(parse_direction=bool(kwargs.get('parse_direction')))
+    return importer.get_graph(parse_direction=parse_direction)
 
 
 def parse_bbox(bbox, **kwargs):

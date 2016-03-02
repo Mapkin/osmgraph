@@ -45,10 +45,11 @@ class GraphImporter(object):
 
             for n0, n1 in tools.pairwise(nodes):
                 g.add_edge(n0, n1, attr_dict=tags)
+                if parse_direction:
+                    g[n0][n1]['_direction'] = 'forward'
                 if not oneway:
                     g.add_edge(n1, n0, attr_dict=tags)
                     if parse_direction:
-                        g[n0][n1]['_direction'] = 'forward'
                         g[n1][n0]['_direction'] = 'backward'
 
                 g.node[n0].update(self._node_properties(n0))
